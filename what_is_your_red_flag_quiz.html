@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Is Your Red Flag?</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cormorant Garamond (Editorial Serif) & Alex Brush / La Belle Aurore (Handwritten Script) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=La+Belle+Aurore&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        burgundy: '#813331',
+                        cream: '#EFE3CE',
+                        creamMuted: '#D6C4A9',
+                        burgundyDark: '#5E2220',
+                        burgundyLight: '#9A4240'
+                    },
+                    fontFamily: {
+                        serifEditorial: ['"Cormorant Garamond"', 'serif'],
+                        scriptHand: ['"La Belle Aurore"', 'cursive'],
+                        sansClean: ['"Plus Jakarta Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Subtle woven linen texture overlay matching the reference image */
+        .linen-bg {
+            background-color: var(--theme-bg, #813331);
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 4px),
+                repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.04) 0px, rgba(0, 0, 0, 0.04) 1px, transparent 1px, transparent 4px),
+                radial-gradient(circle at center, var(--theme-glow, rgba(145, 62, 60, 0.35)) 0%, rgba(0, 0, 0, 0.35) 100%);
+            transition: background-color 0.35s ease, background-image 0.35s ease;
+        }
+
+        /* Dynamic theme surface helpers */
+        .theme-surface {
+            background-color: var(--theme-surface, #5E2220);
+            transition: background-color 0.35s ease;
+        }
+
+        .theme-modal {
+            background-color: var(--theme-modal, #6B2725);
+            transition: background-color 0.35s ease;
+        }
+
+        /* Smooth view transitions */
+        .fade-enter {
+            animation: fadeInScale 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Floating gentle sway for pressed flowers */
+        .flower-sway-top {
+            animation: swayTop 9s ease-in-out infinite alternate;
+            transform-origin: top left;
+        }
+
+        .flower-sway-bottom {
+            animation: swayBottom 10s ease-in-out infinite alternate;
+            transform-origin: bottom right;
+        }
+
+        @keyframes swayTop {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(2.5deg) scale(1.02); }
+        }
+
+        @keyframes swayBottom {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(-2.5deg) scale(1.02); }
+        }
+
+        /* Custom subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #692725;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EFE3CE;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="linen-bg text-cream min-h-screen w-full overflow-x-hidden relative flex flex-col justify-between selection:bg-cream selection:text-burgundy font-sansClean">
+
+    <!-- Top-Left Pressed Cream/Lavender Flower Artwork (Inline SVG) -->
+    <div id="decor-top-left" class="pointer-events-none fixed top-0 left-0 z-0 w-36 sm:w-52 md:w-64 lg:w-72 opacity-95 flower-sway-top transition-opacity duration-500">
+        <svg viewBox="0 0 300 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-xl">
+            <defs>
+                <radialGradient id="creamPetalGrad" cx="40%" cy="40%" r="65%">
+                    <stop offset="0%" stop-color="#F7EEDB"/>
+                    <stop offset="55%" stop-color="#E2D3B3"/>
+                    <stop offset="85%" stop-color="#B7A3B8"/>
+                    <stop offset="100%" stop-color="#7E6B85"/>
+                </radialGradient>
+                <radialGradient id="lavenderEdge" cx="70%" cy="30%" r="60%">
+                    <stop offset="0%" stop-color="#D4C2D9"/>
+                    <stop offset="70%" stop-color="#9B86A6"/>
+                    <stop offset="100%" stop-color="#6B5675"/>
+                </radialGradient>
+                <radialGradient id="flowerCenterGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFFDF5"/>
+                    <stop offset="55%" stop-color="#C9C455"/>
+                    <stop offset="100%" stop-color="#6F7324"/>
+                </radialGradient>
+            </defs>
+            <!-- Upper Back Petal (Lavender tinted) -->
+            <path d="M22 38 C55 -10, 145 -8, 165 45 C180 85, 130 120, 75 110 C30 100, -5 75, 22 38 Z" fill="url(#lavenderEdge)" opacity="0.92"/>
+            <!-- Right Main Cream Petal -->
+            <path d="M75 88 C135 58, 195 95, 185 152 C175 205, 110 198, 65 162 C40 142, 42 105, 75 88 Z" fill="url(#creamPetalGrad)"/>
+            <!-- Bottom Cream Petal -->
+            <path d="M40 135 C95 142, 138 205, 115 258 C95 298, 35 288, 18 242 C2 198, 8 130, 40 135 Z" fill="url(#creamPetalGrad)"/>
+            <!-- Left Overlapping Folded Petal -->
+            <path d="M-15 65 C35 55, 75 110, 58 175 C42 238, 12 285, -20 278 Z" fill="url(#lavenderEdge)" opacity="0.88"/>
+            <!-- Delicate Petal Veins -->
+            <path d="M55 128 Q110 118 165 138 M52 135 Q105 148 152 172 M48 145 Q75 200 82 260 M45 120 Q85 75 135 45" stroke="#8F7D63" stroke-width="1.2" stroke-opacity="0.35" stroke-linecap="round"/>
+            <!-- Flower Stamen & Pistil Core -->
+            <circle cx="48" cy="132" r="24" fill="url(#flowerCenterGrad)"/>
+            <g fill="#5B611A" opacity="0.85">
+                <circle cx="38" cy="122" r="2.5"/><circle cx="52" cy="118" r="2.2"/><circle cx="62" cy="129" r="2.8"/>
+                <circle cx="55" cy="144" r="2.4"/><circle cx="40" cy="142" r="2.6"/><circle cx="47" cy="131" r="3"/>
+                <circle cx="31" cy="133" r="2"/><circle cx="65" cy="138" r="2.1"/>
+            </g>
+            <g fill="#F4F0A8">
+                <circle cx="43" cy="126" r="1.8"/><circle cx="56" cy="125" r="1.6"/><circle cx="50" cy="138" r="2"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Bottom-Right Pressed Dusty Rose Flower Artwork (Inline SVG) -->
+    <div id="decor-bottom-right" class="pointer-events-none fixed bottom-0 right-0 z-0 w-40 sm:w-56 md:w-72 lg:w-80 opacity-95 flower-sway-bottom transition-opacity duration-500">
+        <svg viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-xl">
+            <defs>
+                <radialGradient id="rosePetalGrad" cx="65%" cy="60%" r="70%">
+                    <stop offset="0%" stop-color="#A85258"/>
+                    <stop offset="45%" stop-color="#D88A92"/>
+                    <stop offset="85%" stop-color="#E7A7AE"/>
+                    <stop offset="100%" stop-color="#F1C2C7"/>
+                </radialGradient>
+                <radialGradient id="rosePetalBack" cx="50%" cy="50%" r="65%">
+                    <stop offset="0%" stop-color="#8A3D43"/>
+                    <stop offset="75%" stop-color="#C77880"/>
+                    <stop offset="100%" stop-color="#DFA0A6"/>
+                </radialGradient>
+            </defs>
+            <!-- Top Petal -->
+            <path d="M210 155 C175 105, 195 35, 255 32 C305 30, 325 85, 295 140 C275 175, 232 185, 210 155 Z" fill="url(#rosePetalBack)"/>
+            <!-- Left Upper Petal -->
+            <path d="M195 175 C135 165, 85 115, 115 68 C142 28, 205 55, 222 115 C232 148, 218 178, 195 175 Z" fill="url(#rosePetalGrad)"/>
+            <!-- Left Lower Petal -->
+            <path d="M195 195 C145 235, 75 225, 68 172 C62 125, 125 112, 178 148 C202 164, 212 182, 195 195 Z" fill="url(#rosePetalGrad)"/>
+            <!-- Bottom Petal -->
+            <path d="M215 210 C205 268, 148 312, 108 282 C72 255, 102 195, 162 182 C192 175, 218 190, 215 210 Z" fill="url(#rosePetalBack)"/>
+            <!-- Bottom-Right Foreground Petal -->
+            <path d="M235 205 C285 218, 325 275, 285 312 C248 345, 185 315, 195 255 C200 225, 215 200, 235 205 Z" fill="url(#rosePetalGrad)"/>
+            <!-- Subtle Veins -->
+            <path d="M215 165 Q245 100 265 55 M202 175 Q155 130 130 85 M198 188 Q135 180 88 175 M215 202 Q175 245 130 272" stroke="#6E282E" stroke-width="1.2" stroke-opacity="0.3" stroke-linecap="round"/>
+            <!-- Dark Velvet Center & Anthers -->
+            <circle cx="222" cy="182" r="24" fill="#591C21" opacity="0.85"/>
+            <g fill="#3E1115">
+                <circle cx="212" cy="172" r="3.2"/><circle cx="228" cy="168" r="2.8"/><circle cx="236" cy="182" r="3.5"/>
+                <circle cx="225" cy="196" r="3"/><circle cx="209" cy="190" r="2.8"/><circle cx="221" cy="181" r="4"/>
+            </g>
+            <g fill="#D99B82" opacity="0.8">
+                <circle cx="215" cy="175" r="1.5"/><circle cx="231" cy="176" r="1.5"/><circle cx="218" cy="191" r="1.5"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Main Container -->
+    <main class="relative z-10 flex-grow flex flex-col items-center justify-between w-full max-w-4xl mx-auto px-6 py-10 sm:py-14 md:py-16">
+        
+        <!-- Header Title Block (Matches the stacked editorial + overlapping cursive layout from the image) -->
+        <header id="main-header" class="w-full text-center pt-1 sm:pt-2 transition-all duration-500">
+            <p class="font-serifEditorial uppercase tracking-[0.28em] text-cream text-sm sm:text-lg md:text-xl font-normal mb-2 sm:mb-3 select-none">
+                WHAT IS YOUR
+            </p>
+            <h1 class="font-scriptHand text-cream text-6xl sm:text-7xl md:text-8xl lg:text-[6.25rem] leading-[0.9] select-none drop-shadow-sm">
+                red flag?
+            </h1>
+            <p class="font-serifEditorial uppercase tracking-[0.22em] text-cream/80 text-xs sm:text-sm mt-6 sm:mt-8 select-none">
+                Only takes 5 (+2) questions!
+            </p>
+        </header>
+
+        <!-- VIEW 1: LANDING SCREEN (Empty middle space + Start & Settings buttons below the middle) -->
+        <section id="view-home" class="w-full flex-grow flex flex-col justify-end items-center pb-8 sm:pb-12 md:pb-16 fade-enter">
+            <!-- Intentional breathing room in the center matching the user's reference aesthetic -->
+            <div class="min-h-[22vh] sm:min-h-[26vh]"></div>
+
+            <!-- Brief description between title and buttons -->
+            <p class="font-serifEditorial italic text-cream/90 text-lg sm:text-xl tracking-wide text-center mb-6">
+                Try to answer truthfully :)
+            </p>
+
+            <!-- Action Buttons positioned below the middle -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 w-full max-w-md">
+                <button 
+                    id="btn-start"
+                    onclick="startQuiz()"
+                    class="w-full sm:w-44 py-3.5 px-8 rounded-full bg-cream text-burgundy font-serifEditorial font-semibold text-lg tracking-widest uppercase shadow-lg hover:bg-white hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
+                    <span>Start</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                    </svg>
+                </button>
+
+                <button 
+                    id="btn-settings"
+                    onclick="openSettings()"
+                    class="w-full sm:w-44 py-3.5 px-7 rounded-full border border-cream/55 bg-burgundyDark/40 backdrop-blur-sm text-cream font-serifEditorial font-semibold text-lg tracking-widest uppercase hover:bg-cream/15 hover:border-cream hover:scale-[1.03] active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 opacity-90" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    <span>Settings</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- VIEW 2: SAMPLE QUESTION SCREEN (uQuiz style interactive card) -->
+        <section id="view-quiz" class="hidden w-full max-w-xl my-auto py-6 fade-enter">
+            <div class="theme-surface/85 backdrop-blur-md border border-cream/25 rounded-3xl p-6 sm:p-9 shadow-2xl">
+                <!-- Progress Indicator -->
+                <div class="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-creamMuted mb-4 font-serifEditorial">
+                    <span id="question-counter">Question 1 of 1</span>
+                    <span id="player-badge" class="hidden italic lowercase tracking-normal text-sm">for you</span>
+                </div>
+                <div class="w-full h-1 bg-cream/15 rounded-full overflow-hidden mb-7">
+                    <div class="h-full bg-cream w-full rounded-full transition-all duration-500"></div>
+                </div>
+
+                <!-- Dynamic Question Prompt -->
+                <h2 id="quiz-question-text" class="font-serifEditorial text-2xl sm:text-3xl text-cream leading-snug mb-6 font-normal">
+                    Someone texts you <span class="italic text-creamMuted">“we need to talk”</span> at 11:47 PM on a Tuesday. What is your immediate internal reaction?
+                </h2>
+
+                <!-- Dynamic uQuiz-style Answer Options -->
+                <div id="options-container" class="space-y-3"></div>
+
+                <!-- Subtle Back link -->
+                <div class="mt-6 pt-4 border-t border-cream/15 flex justify-between items-center">
+                    <button id="btn-prev-question" onclick="prevQuestion()" class="text-xs uppercase tracking-widest text-creamMuted hover:text-cream transition-colors cursor-pointer">
+                        ← Back to Title
+                    </button>
+                    <span id="quiz-footer-tag" class="text-xs text-cream/50 italic font-serifEditorial">Official Quiz</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: RESULT SCREEN -->
+        <section id="view-result" class="hidden w-full max-w-xl my-auto py-6 fade-enter">
+            <div class="theme-surface/90 backdrop-blur-md border border-cream/30 rounded-3xl p-7 sm:p-10 shadow-2xl text-center">
+                <p id="result-for-label" class="font-serifEditorial uppercase tracking-[0.25em] text-xs text-creamMuted mb-2">
+                    Your Red Flag Is
+                </p>
+                <h2 id="result-title" class="font-scriptHand text-5xl sm:text-6xl text-cream mb-4 leading-tight">
+                    Chronic Over-Intellectualizer
+                </h2>
+                <div class="w-16 h-px bg-cream/35 mx-auto mb-5"></div>
+                <p id="result-description" class="font-serifEditorial text-lg sm:text-xl text-cream/95 leading-relaxed whitespace-pre-line mb-8">
+                    You don’t just feel your emotions—you cross-examine them in a court of law. Instead of saying “that hurt my feelings,” you deliver a calm, devastatingly accurate psychological profile at 1 AM.
+                </p>
+
+                <!-- Result Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <button onclick="restartQuiz()" class="w-full sm:w-auto py-3 px-7 rounded-full bg-cream text-burgundy font-serifEditorial font-semibold uppercase tracking-widest text-sm hover:bg-white transition-all cursor-pointer">
+                        Retake Sample
+                    </button>
+                    <button onclick="copyResult()" id="btn-copy" class="w-full sm:w-auto py-3 px-7 rounded-full border border-cream/50 text-cream font-serifEditorial font-semibold uppercase tracking-widest text-sm hover:bg-cream/15 transition-all cursor-pointer">
+                        Share Result
+                    </button>
+                    <button onclick="goHome()" class="w-full sm:w-auto py-3 px-6 rounded-full text-creamMuted hover:text-cream font-serifEditorial uppercase tracking-widest text-xs transition-all cursor-pointer">
+                        Home
+                    </button>
+                </div>
+                <p id="copy-toast" class="text-xs text-creamMuted mt-3 opacity-0 transition-opacity duration-300">
+                    Copied your red flag to clipboard!
+                </p>
+            </div>
+        </section>
+
+        <!-- Minimal Footer Spacer -->
+        <footer class="w-full text-center text-[11px] tracking-[0.2em] uppercase text-cream/40 font-serifEditorial pt-4">
+            What Is Your Red Flag? • Official Interactive Quiz
+        </footer>
+    </main>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/55 backdrop-blur-sm">
+        <div class="theme-modal border border-cream/30 rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl text-cream fade-enter">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="font-serifEditorial text-2xl tracking-wider uppercase">Quiz Settings</h3>
+                <button onclick="closeSettings()" class="p-2 rounded-full hover:bg-cream/10 text-creamMuted hover:text-cream transition-colors cursor-pointer" aria-label="Close Settings">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="space-y-5">
+                <!-- uQuiz-style Name Input -->
+                <div>
+                    <label for="input-username" class="block font-serifEditorial uppercase tracking-widest text-xs text-creamMuted mb-2">
+                        Your Name (Classic uQuiz Style)
+                    </label>
+                    <input 
+                        type="text" 
+                        id="input-username" 
+                        placeholder="Enter your name or leave blank..."
+                        class="w-full px-4 py-3 rounded-xl bg-burgundyDark/80 border border-cream/25 text-cream placeholder-cream/40 focus:outline-none focus:border-cream text-sm"
+                    >
+                </div>
+
+                <!-- Color Theme Picker -->
+                <div class="pt-3 border-t border-cream/15">
+                    <label class="block font-serifEditorial uppercase tracking-widest text-xs text-creamMuted mb-2.5">
+                        Color Theme
+                    </label>
+                    <div id="theme-options" class="grid grid-cols-2 gap-2.5">
+                        <button type="button" data-theme="burgundy" onclick="setColorTheme('burgundy')" class="theme-choice px-3.5 py-2.5 rounded-xl border border-cream/25 bg-burgundyDark/60 text-left flex items-center gap-2.5 hover:border-cream transition-all cursor-pointer">
+                            <span class="w-4 h-4 rounded-full bg-[#813331] border border-cream/60 shrink-0"></span>
+                            <span class="text-xs font-medium text-cream">Default</span>
+                        </button>
+                        <button type="button" data-theme="midnight" onclick="setColorTheme('midnight')" class="theme-choice px-3.5 py-2.5 rounded-xl border border-cream/25 bg-burgundyDark/60 text-left flex items-center gap-2.5 hover:border-cream transition-all cursor-pointer">
+                            <span class="w-4 h-4 rounded-full bg-[#1E293B] border border-cream/60 shrink-0"></span>
+                            <span class="text-xs font-medium text-cream">Blue</span>
+                        </button>
+                        <button type="button" data-theme="forest" onclick="setColorTheme('forest')" class="theme-choice px-3.5 py-2.5 rounded-xl border border-cream/25 bg-burgundyDark/60 text-left flex items-center gap-2.5 hover:border-cream transition-all cursor-pointer">
+                            <span class="w-4 h-4 rounded-full bg-[#244234] border border-cream/60 shrink-0"></span>
+                            <span class="text-xs font-medium text-cream">Green</span>
+                        </button>
+                        <button type="button" data-theme="plum" onclick="setColorTheme('plum')" class="theme-choice px-3.5 py-2.5 rounded-xl border border-cream/25 bg-burgundyDark/60 text-left flex items-center gap-2.5 hover:border-cream transition-all cursor-pointer">
+                            <span class="w-4 h-4 rounded-full bg-[#4A2545] border border-cream/60 shrink-0"></span>
+                            <span class="text-xs font-medium text-cream">Purple</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Toggle: Gentle Ambient Sound Effects -->
+                <div class="flex items-center justify-between py-2 border-t border-cream/15">
+                    <div>
+                        <p class="font-serifEditorial text-base tracking-wide">Soft Click Chimes</p>
+                        <p class="text-xs text-creamMuted">Subtle acoustic feedback on button taps</p>
+                    </div>
+                    <button id="toggle-sound" onclick="toggleSetting('sound')" class="w-12 h-6 rounded-full bg-cream p-1 transition-colors duration-200 flex items-center justify-end cursor-pointer">
+                        <span class="w-4 h-4 rounded-full bg-burgundy block shadow"></span>
+                    </button>
+                </div>
+
+                <!-- Toggle: Floral Corner Accents -->
+                <div class="flex items-center justify-between py-2 border-t border-cream/15">
+                    <div>
+                        <p class="font-serifEditorial text-base tracking-wide">Pressed Flower Borders</p>
+                        <p class="text-xs text-creamMuted">Display vintage botanical corner art</p>
+                    </div>
+                    <button id="toggle-flowers" onclick="toggleSetting('flowers')" class="w-12 h-6 rounded-full bg-cream p-1 transition-colors duration-200 flex items-center justify-end cursor-pointer">
+                        <span class="w-4 h-4 rounded-full bg-burgundy block shadow"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button onclick="saveAndCloseSettings()" class="w-full py-3 rounded-full bg-cream text-burgundy font-serifEditorial font-semibold uppercase tracking-widest text-sm hover:bg-white transition-all cursor-pointer">
+                    Save & Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Secret Easter Egg Screening Flow (Before the main quiz starts)
+        const easterEggStages = [
+            {
+                prompt: "Before we start, I'd like to clear up some things first... Does your name start with the initial F?"
+            },
+            {
+                prompt: "Are you perhaps, an ICT teacher?"
+            }
+        ];
+
+        const tsundereSecretResult = {
+            id: 'secret_tsundere',
+            title: "Tsundere",
+            description: "you are a tsundere and you cannot convince me otherwise. you also reuse memes way too much. i'm joking, you're cool"
+        };
+
+        // Default Quiz Structure (uQuiz Style: Results + Multi-Question weighted choices)
+        const defaultQuizData = {
+            results: [
+                {
+                    id: 'res_1',
+                    title: "Insecure",
+                    description: "You are insecure. Probably an overthinker and compare yourself to others a lot. Honestly, this is the least harmful red flag, but you gotta work on it man, it's sad... 💔🥀\n\nYou got this result because you mainly chose answers that are labeled or interpreted as insecure. (e.g. X)"
+                },
+                {
+                    id: 'res_2',
+                    title: "Dramatic",
+                    description: "You are dramatic and a minor inconvenience would get you super emotional. It's not the worst red flag, but you have to learn how to control your emotions >:(\n\nYou got this result because you mainly chose answers that are labeled or interpreted as dramatic. (e.g. X)"
+                },
+                {
+                    id: 'res_3',
+                    title: "Controlling",
+                    description: "This is like, the worst red flag in the list. If you got this, you're scary. Pls don't hurt my family 😰😢😭😭\n\nYou got this result because you mainly chose answers that are labeled or interpreted as controlling. (e.g. X)"
+                },
+                {
+                    id: 'res_4',
+                    title: "Stalker",
+                    description: "You are a stalker and would stalk your crush/friends online 24/7 just to make sure you know everything about them and make things perfect or something??... I bet you've stalked someone at midnight before because you found them ever so slightly interesting... 😰😰😰\n\nYou got this result because you mainly chose answers that are labeled or interpreted as a stalker. (e.g. X)"
+                },
+                {
+                    id: 'res_5',
+                    title: "You... don't actually have any?",
+                    description: "Well then, good for you! You got this result because you mainly chose answers that are labeled or interpreted as normal. (e.g. X)"
+                }
+            ],
+            questions: [
+                {
+                    id: 'q_1',
+                    prompt: "Someone tells you that you said something wrong about them. What's your immediate reaction?",
+                    options: [
+                        { text: "Pretend that they never told me because I feel embarrassed", resultId: 'res_1' },
+                        { text: "Reply with \"k\"", resultId: 'res_2' },
+                        { text: "Explain why they're actually wrong", resultId: 'res_3' },
+                        { text: "I wasn't wrong because I know them of course?", resultId: 'res_4' },
+                        { text: "I feel annoyed, but I'll try to understand what it was", resultId: 'res_5' }
+                    ]
+                },
+                {
+                    id: 'q_2',
+                    prompt: "Your friends invited you to an event but nobody is paying attention to you. What do you do?",
+                    options: [
+                        { text: "Nothing. I hate being the center of attention anyway", resultId: 'res_1' },
+                        { text: "Do a cool dance move in the middle of the crowd", resultId: 'res_2' },
+                        { text: "Tell your friend, \"I'm fine, really, you go have fun without me\"", resultId: 'res_3' },
+                        { text: "Just stay and observe", resultId: 'res_4' },
+                        { text: "Find someone to talk to. I'm feeling lonely is all", resultId: 'res_5' }
+                    ]
+                },
+                {
+                    id: 'q_3',
+                    prompt: "Your crush likes someone else's post. What do you do?",
+                    options: [
+                        { text: "It's fine, they're probably better than me", resultId: 'res_1' },
+                        { text: "One-up them by posting something more awesome", resultId: 'res_2' },
+                        { text: "Befriend them", resultId: 'res_3' },
+                        { text: "Check out their profile", resultId: 'res_4' },
+                        { text: "Acknowledge it but scroll away", resultId: 'res_5' }
+                    ]
+                },
+                {
+                    id: 'q_4',
+                    prompt: "Someone leaves you on read. What do you do?",
+                    options: [
+                        { text: "Overthink. Did I do something wrong?", resultId: 'res_1' },
+                        { text: "Spam them. No mercy", resultId: 'res_2' },
+                        { text: "Ask others about them", resultId: 'res_3' },
+                        { text: "See what they're up to on their status/story", resultId: 'res_4' },
+                        { text: "Ignore it", resultId: 'res_5' }
+                    ]
+                },
+                {
+                    id: 'q_5',
+                    prompt: "Someone asks about your best friend's secret. What would you most likely say/do in this situation?",
+                    options: [
+                        { text: "\"Just promise not to tell anyone...\"", resultId: 'res_1' },
+                        { text: "\"Wow, it’s honestly insulting that you think I’m the kind of person who would betray my best friend like that.\"", resultId: 'res_2' },
+                        { text: "\"I'll tell you under one condition.\"", resultId: 'res_3' },
+                        { text: "Ask why they're asking", resultId: 'res_4' },
+                        { text: "Pretend you don't know to save the secret", resultId: 'res_5' }
+                    ]
+                }
+            ]
+        };
+
+        const STORAGE_KEY = 'red_flag_uquiz_data_v11';
+        function loadQuizData() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (parsed && Array.isArray(parsed.results) && parsed.results.length > 0 && Array.isArray(parsed.questions) && parsed.questions.length > 0) {
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.warn('Could not load saved quiz data, using defaults.', e);
+            }
+            return JSON.parse(JSON.stringify(defaultQuizData));
+        }
+
+        function persistQuizData() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(quizData));
+            } catch (e) {
+                console.warn('Could not save quiz data to localStorage.', e);
+            }
+        }
+
+        let quizData = loadQuizData();
+
+        // Quiz State & Settings
+        const colorThemes = {
+            burgundy: {
+                bg: '#813331',
+                surface: '#5E2220',
+                modal: '#6B2725',
+                glow: 'rgba(145, 62, 60, 0.35)'
+            },
+            midnight: {
+                bg: '#1E293B',
+                surface: '#0F172A',
+                modal: '#162032',
+                glow: 'rgba(71, 85, 105, 0.38)'
+            },
+            forest: {
+                bg: '#244234',
+                surface: '#152920',
+                modal: '#1C352A',
+                glow: 'rgba(67, 112, 90, 0.35)'
+            },
+            plum: {
+                bg: '#4A2545',
+                surface: '#2E152B',
+                modal: '#3B1C37',
+                glow: 'rgba(118, 62, 111, 0.35)'
+            }
+        };
+
+        const state = {
+            userName: '',
+            colorTheme: 'burgundy',
+            soundEnabled: true,
+            flowersEnabled: true,
+            easterEggStage: 0, // 0 = Q1 ("initial F?"), 1 = Q2 ("ICT teacher?"), -1 = main quiz
+            currentQuestionIndex: 0,
+            chosenAnswers: [], // array of resultIds selected per question
+            selectedResult: null
+        };
+
+        function applyColorTheme(themeKey) {
+            const palette = colorThemes[themeKey] || colorThemes.burgundy;
+            state.colorTheme = colorThemes[themeKey] ? themeKey : 'burgundy';
+
+            const root = document.documentElement;
+            root.style.setProperty('--theme-bg', palette.bg);
+            root.style.setProperty('--theme-surface', palette.surface);
+            root.style.setProperty('--theme-modal', palette.modal);
+            root.style.setProperty('--theme-glow', palette.glow);
+
+            document.querySelectorAll('.theme-choice').forEach(btn => {
+                const isSelected = btn.dataset.theme === state.colorTheme;
+                btn.classList.toggle('border-cream', isSelected);
+                btn.classList.toggle('bg-cream/15', isSelected);
+                btn.classList.toggle('border-cream/25', !isSelected);
+            });
+        }
+
+        function setColorTheme(themeKey) {
+            applyColorTheme(themeKey);
+            playSoftChime(580);
+        }
+
+        applyColorTheme(state.colorTheme);
+
+        const romanNumerals = ['i.', 'ii.', 'iii.', 'iv.', 'v.', 'vi.', 'vii.', 'viii.'];
+
+        // Navigation Actions
+        function startQuiz() {
+            playSoftChime(580);
+            state.easterEggStage = 0;
+            state.currentQuestionIndex = 0;
+            state.chosenAnswers = [];
+
+            const badge = document.getElementById('player-badge');
+            if (state.userName.trim()) {
+                badge.textContent = `taken by ${state.userName.trim()}`;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            renderCurrentQuestion();
+            showView('view-quiz');
+        }
+
+        function renderCurrentQuestion() {
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            // Handle the playful secret screening questions first
+            if (state.easterEggStage === 0 || state.easterEggStage === 1) {
+                const stageData = easterEggStages[state.easterEggStage];
+                document.getElementById('question-counter').textContent = state.easterEggStage === 0 ? 'Quick Check' : 'Wait a second...';
+                const progressBar = document.querySelector('#view-quiz .bg-cream.rounded-full');
+                if (progressBar) {
+                    progressBar.style.width = state.easterEggStage === 0 ? '15%' : '35%';
+                }
+
+                const prevBtn = document.getElementById('btn-prev-question');
+                prevBtn.textContent = state.easterEggStage === 0 ? '← Back to Title' : '← Wait, go back';
+
+                document.getElementById('quiz-question-text').textContent = stageData.prompt;
+
+                ['Yes', 'No'].forEach((choice, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'quiz-option w-full text-left p-4 rounded-2xl border border-cream/25 bg-burgundy/50 hover:bg-cream hover:text-burgundy transition-all duration-200 flex items-start gap-3.5 group cursor-pointer';
+                    btn.onclick = () => handleEasterEggAnswer(choice === 'Yes');
+
+                    const numeral = document.createElement('span');
+                    numeral.className = 'font-serifEditorial italic text-lg opacity-70 group-hover:opacity-100 mt-0.5';
+                    numeral.textContent = romanNumerals[idx];
+
+                    const label = document.createElement('span');
+                    label.className = 'text-sm sm:text-base leading-relaxed font-medium';
+                    label.textContent = choice;
+
+                    btn.appendChild(numeral);
+                    btn.appendChild(label);
+                    container.appendChild(btn);
+                });
+                return;
+            }
+
+            // Standard Main Quiz Questions
+            const total = quizData.questions.length;
+            const idx = state.currentQuestionIndex;
+            const q = quizData.questions[idx];
+
+            // Update counter & progress bar
+            document.getElementById('question-counter').textContent = `Question ${idx + 1} of ${total}`;
+            const progressBar = document.querySelector('#view-quiz .bg-cream.rounded-full');
+            if (progressBar) {
+                progressBar.style.width = `${((idx + 1) / total) * 100}%`;
+            }
+
+            // Update back button text
+            const prevBtn = document.getElementById('btn-prev-question');
+            prevBtn.textContent = idx === 0 ? '← Back to Check' : '← Previous Question';
+
+            // Set prompt
+            document.getElementById('quiz-question-text').textContent = q.prompt;
+
+            // Render answer options
+            q.options.forEach((opt, optIdx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option w-full text-left p-4 rounded-2xl border border-cream/25 bg-burgundy/50 hover:bg-cream hover:text-burgundy transition-all duration-200 flex items-start gap-3.5 group cursor-pointer';
+                btn.onclick = () => selectAnswer(opt.resultId);
+
+                const numeral = document.createElement('span');
+                numeral.className = 'font-serifEditorial italic text-lg opacity-70 group-hover:opacity-100 mt-0.5';
+                numeral.textContent = romanNumerals[optIdx] || `${optIdx + 1}.`;
+
+                const label = document.createElement('span');
+                label.className = 'text-sm sm:text-base leading-relaxed';
+                label.textContent = opt.text;
+
+                btn.appendChild(numeral);
+                btn.appendChild(label);
+                container.appendChild(btn);
+            });
+        }
+
+        function handleEasterEggAnswer(isYes) {
+            playSoftChime(isYes ? 680 : 540);
+            if (state.easterEggStage === 0) {
+                if (isYes) {
+                    state.easterEggStage = 1;
+                    renderCurrentQuestion();
+                } else {
+                    state.easterEggStage = -1;
+                    renderCurrentQuestion();
+                }
+            } else if (state.easterEggStage === 1) {
+                if (isYes) {
+                    // Instantly trigger the secret Tsundere result!
+                    displayResult(tsundereSecretResult);
+                } else {
+                    state.easterEggStage = -1;
+                    renderCurrentQuestion();
+                }
+            }
+        }
+
+        function prevQuestion() {
+            playSoftChime(440);
+            if (state.easterEggStage === 0) {
+                goHome();
+            } else if (state.easterEggStage === 1) {
+                state.easterEggStage = 0;
+                renderCurrentQuestion();
+            } else if (state.currentQuestionIndex > 0) {
+                state.currentQuestionIndex--;
+                state.chosenAnswers.pop();
+                renderCurrentQuestion();
+            } else {
+                state.easterEggStage = 0;
+                renderCurrentQuestion();
+            }
+        }
+
+        function selectAnswer(resultId) {
+            playSoftChime(660);
+            state.chosenAnswers[state.currentQuestionIndex] = resultId;
+
+            if (state.currentQuestionIndex + 1 < quizData.questions.length) {
+                state.currentQuestionIndex++;
+                renderCurrentQuestion();
+            } else {
+                calculateAndShowResult();
+            }
+        }
+
+        function calculateAndShowResult() {
+            // Tally points per resultId (classic uQuiz scoring)
+            const scores = {};
+            quizData.results.forEach(r => { scores[r.id] = 0; });
+
+            state.chosenAnswers.forEach(rId => {
+                if (scores[rId] !== undefined) {
+                    scores[rId]++;
+                }
+            });
+
+            // Find highest scoring result
+            let winningResult = quizData.results[0];
+            let maxScore = -1;
+            quizData.results.forEach(r => {
+                if (scores[r.id] > maxScore) {
+                    maxScore = scores[r.id];
+                    winningResult = r;
+                }
+            });
+
+            displayResult(winningResult);
+        }
+
+        function displayResult(resultObj) {
+            let finalDescription = resultObj.description;
+
+            // Replace placeholder X with an actual answer the user selected for this personality
+            if (finalDescription.includes('(e.g. X)')) {
+                const matchingChosenTexts = [];
+                state.chosenAnswers.forEach((chosenResId, qIdx) => {
+                    if (chosenResId === resultObj.id && quizData.questions[qIdx]) {
+                        const matchedOpt = quizData.questions[qIdx].options.find(opt => opt.resultId === resultObj.id);
+                        if (matchedOpt) {
+                            matchingChosenTexts.push(matchedOpt.text);
+                        }
+                    }
+                });
+
+                // Fallback to any option tied to this result if none matched directly (e.g. tie edge case)
+                let exampleText = matchingChosenTexts[0];
+                if (!exampleText) {
+                    for (const q of quizData.questions) {
+                        const fallbackOpt = q.options.find(opt => opt.resultId === resultObj.id);
+                        if (fallbackOpt) {
+                            exampleText = fallbackOpt.text;
+                            break;
+                        }
+                    }
+                }
+
+                if (exampleText) {
+                    const cleanQuote = exampleText.replace(/^["“]|["”]$/g, '');
+                    finalDescription = finalDescription.replace('(e.g. X)', `(e.g. "${cleanQuote}")`);
+                }
+            }
+
+            const resolvedResult = {
+                ...resultObj,
+                description: finalDescription
+            };
+            state.selectedResult = resolvedResult;
+
+            const labelEl = document.getElementById('result-for-label');
+            labelEl.textContent = state.userName.trim() 
+                ? `${state.userName.trim()}, Your Red Flag Is` 
+                : 'Your Red Flag Is';
+
+            document.getElementById('result-title').textContent = resolvedResult.title;
+            document.getElementById('result-description').textContent = resolvedResult.description;
+            document.getElementById('copy-toast').style.opacity = '0';
+
+            showView('view-result');
+            playResultFanfare();
+        }
+
+        function playResultFanfare() {
+            if (!state.soundEnabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                // Bright little 4-note celebratory arpeggio (C5 -> E5 -> G5 -> C6)
+                const notes = [523.25, 659.25, 783.99, 1046.5];
+                notes.forEach((freq, idx) => {
+                    const startAt = now + idx * 0.085;
+                    const duration = idx === notes.length - 1 ? 0.42 : 0.16;
+
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = idx === notes.length - 1 ? 'triangle' : 'sine';
+                    osc.frequency.setValueAtTime(freq, startAt);
+
+                    gain.gain.setValueAtTime(0.001, startAt);
+                    gain.gain.linearRampToValueAtTime(0.075, startAt + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(startAt);
+                    osc.stop(startAt + duration + 0.02);
+                });
+            } catch (e) {
+                // Ignore if browser blocks audio before gesture
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz();
+        }
+
+        function goHome() {
+            playSoftChime(440);
+            showView('view-home');
+        }
+
+        // Copy Result to Clipboard
+        function copyResult() {
+            playSoftChime(620);
+            if (!state.selectedResult) return;
+            const shareText = `My Red Flag is "${state.selectedResult.title}" — ${state.selectedResult.description}`;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = shareText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            try {
+                document.execCommand('copy');
+                const toast = document.getElementById('copy-toast');
+                toast.style.opacity = '1';
+                setTimeout(() => { toast.style.opacity = '0'; }, 2800);
+            } catch (e) {}
+            document.body.removeChild(tempInput);
+        }
+
+        // Lightweight Web Audio API chime (no external audio files needed)
+        function playSoftChime(freq = 580) {
+            if (!state.soundEnabled) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                // Cute bubbly pop/boop: quick upward pitch glide + soft harmonic sparkle
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq * 0.85, now);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.35, now + 0.075);
+
+                gain.gain.setValueAtTime(0.001, now);
+                gain.gain.linearRampToValueAtTime(0.065, now + 0.015);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.15);
+
+                // Second playful mini-pip right after for a lively "bloop!" feel
+                const pip = ctx.createOscillator();
+                const pipGain = ctx.createGain();
+                pip.type = 'sine';
+                pip.frequency.setValueAtTime(freq * 1.5, now + 0.055);
+                pip.frequency.exponentialRampToValueAtTime(freq * 1.85, now + 0.13);
+
+                pipGain.gain.setValueAtTime(0.0001, now + 0.055);
+                pipGain.gain.linearRampToValueAtTime(0.04, now + 0.07);
+                pipGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+
+                pip.connect(pipGain);
+                pipGain.connect(ctx.destination);
+                pip.start(now + 0.055);
+                pip.stop(now + 0.17);
+            } catch (e) {
+                // Ignore if browser blocks audio before gesture
+            }
+        }
+
+        // View Switcher Helper
+        function showView(viewId) {
+            ['view-home', 'view-quiz', 'view-result'].forEach(id => {
+                const el = document.getElementById(id);
+                if (id === viewId) {
+                    el.classList.remove('hidden');
+                    // Re-trigger animation
+                    el.classList.remove('fade-enter');
+                    void el.offsetWidth;
+                    el.classList.add('fade-enter');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        // Settings Modal Controls
+        function openSettings() {
+            playSoftChime(500);
+            document.getElementById('input-username').value = state.userName;
+            applyColorTheme(state.colorTheme);
+            document.getElementById('settings-modal').classList.remove('hidden');
+        }
+
+        function closeSettings() {
+            playSoftChime(440);
+            document.getElementById('settings-modal').classList.add('hidden');
+        }
+
+        function toggleSetting(key) {
+            if (key === 'sound') {
+                state.soundEnabled = !state.soundEnabled;
+                updateToggleUI('toggle-sound', state.soundEnabled);
+                if (state.soundEnabled) playSoftChime(600);
+            } else if (key === 'flowers') {
+                state.flowersEnabled = !state.flowersEnabled;
+                updateToggleUI('toggle-flowers', state.flowersEnabled);
+                playSoftChime(540);
+                const opacity = state.flowersEnabled ? '0.95' : '0';
+                document.getElementById('decor-top-left').style.opacity = opacity;
+                document.getElementById('decor-bottom-right').style.opacity = opacity;
+            }
+        }
+
+        function updateToggleUI(btnId, isActive) {
+            const btn = document.getElementById(btnId);
+            if (isActive) {
+                btn.classList.remove('bg-burgundyDark', 'justify-start', 'border', 'border-cream/30');
+                btn.classList.add('bg-cream', 'justify-end');
+                btn.firstElementChild.classList.remove('bg-cream');
+                btn.firstElementChild.classList.add('bg-burgundy');
+            } else {
+                btn.classList.remove('bg-cream', 'justify-end');
+                btn.classList.add('bg-burgundyDark', 'justify-start', 'border', 'border-cream/30');
+                btn.firstElementChild.classList.remove('bg-burgundy');
+                btn.firstElementChild.classList.add('bg-cream');
+            }
+        }
+
+        function saveAndCloseSettings() {
+            state.userName = document.getElementById('input-username').value;
+            closeSettings();
+        }
+    </script>
+</body>
+</html>
